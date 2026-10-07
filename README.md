@@ -4,11 +4,10 @@
 
 ## 👥 Datos Generales
 
-* **Materia:** [Ingenieria en Software]
-* **Profesor/a:** [Marisol Amezcua López]
-* **AProfesor/a:** [Eric Toporek Coca]
-* **Profesor/a:** [José Galaviz]
-* **AProfesor/a:** [Rubén Ruiz Marrón]
+* **Materia:** Ingenieria en Software
+* **Profesor/a:** Marisol Amezcua López
+* **Profesor/a:** Eric Toporek Coca
+* **AProfesor/a:** Rubén Ruiz Marrón
 
 ### Integrantes
 * **[Nombre]** - [No cuenta / Correo]
