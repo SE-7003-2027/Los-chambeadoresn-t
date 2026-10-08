@@ -13,5 +13,5 @@
 * **[Nombre]** - [No cuenta / Correo]
 * **[Nombre]** - [No cuenta / Correo]
 * **[Nombre]** - [No cuenta / Correo]
-* **[Nombre]** - [No cuenta / Correo]
+* **Naomi Mociño** - [No cuenta / Correo]
 * **Hazel Torres Nava** - [319158496 / hazelt@ciecnias.unam.mx]
