@@ -5,113 +5,134 @@ import 'leaflet/dist/leaflet.css';
 import './App.css';
 
 function App() {
-  const [conciertos, setConciertos] = useState([]);
+  const [conciertosOriginales, setConciertosOriginales] = useState([]);
+  const [conciertosVisibles, setConciertosVisibles] = useState([]);
   const [busqueda, setBusqueda] = useState('');
-  const [tokenSpotify, setTokenSpotify] = useState(null);
+  const [usuarioLastfm, setUsuarioLastfm] = useState('');
+  const [cargando, setCargando] = useState(false);
   
   const center = [19.4326, -99.1332];
 
-  // 1. Cargar conciertos al inicio y verificar si venimos de Spotify
   useEffect(() => {
-    cargarConciertos(); // Carga todo por defecto
-
-    // Revisar si hay un token en la URL (cuando Spotify nos redirige)
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
-    if (token) {
-      setTokenSpotify(token);
-      // Limpiar la URL para que no se vea el token feo
-      window.history.replaceState({}, document.title, "/"); 
-    }
+    cargarConciertos();
   }, []);
 
-  // 2. Función para pedir conciertos a Ticketmaster (con o sin filtro)
-  const cargarConciertos = (filtro = '') => {
-    axios.get(`http://localhost:3000/api/conciertos?keyword=${filtro}`)
-      .then(response => setConciertos(response.data))
-      .catch(error => console.error("Error:", error));
+  // Cargar desde Ticketmaster
+  const cargarConciertos = async (filtro = '') => {
+    setCargando(true);
+    try {
+      const response = await axios.get(`http://localhost:3000/api/conciertos?keyword=${filtro}`);
+      setConciertosOriginales(response.data);
+      setConciertosVisibles(response.data);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+    setCargando(false);
   };
 
-  // 3. Manejar la búsqueda manual
+  // Filtrado manual por texto
   const manejarBusqueda = (e) => {
     e.preventDefault();
     cargarConciertos(busqueda);
   };
 
-  // 4. Conectar a Spotify
-  const loginSpotify = () => {
-    window.location.href = 'http://localhost:3000/api/spotify/login';
-  };
-
-  // 5. Filtrar por gustos usando el token
-  const filtrarPorMisGustos = async () => {
-    if (!tokenSpotify) return;
+  // Filtrado mágico con Last.fm
+  const filtrarPorLastfm = async (e) => {
+    e.preventDefault();
+    if (!usuarioLastfm) return alert("Ingresa un usuario de Last.fm");
+    
+    setCargando(true);
     try {
-      // Pedimos los artistas top al backend
-      const res = await axios.get('http://localhost:3000/api/spotify/mis-artistas', {
-        headers: { Authorization: tokenSpotify }
-      });
+      const res = await axios.get(`http://localhost:3000/api/lastfm/mis-artistas?username=${usuarioLastfm}`);
       const misArtistas = res.data;
-      alert(`Buscando conciertos de: ${misArtistas.join(', ')}`);
+      alert(`Analizando tus gustos musicales... Top bandas encontradas:\n${misArtistas.slice(0, 5).join(', ')}...`);
       
-      // Filtramos los conciertos que ya tenemos cargados
-      setConciertos(prevConciertos => 
-        prevConciertos.filter(c => 
-          misArtistas.some(artista => c.artista.toLowerCase().includes(artista.toLowerCase()))
-        )
+      const filtrados = conciertosOriginales.filter(c => 
+        misArtistas.some(artista => c.artista.toLowerCase().includes(artista.toLowerCase()))
       );
+      
+      setConciertosVisibles(filtrados);
+      if(filtrados.length === 0) alert("No encontramos conciertos cercanos de tus bandas favoritas. Intenta quitar los filtros.");
     } catch (error) {
-      console.error("Error buscando gustos", error);
+      alert("No se encontró el usuario de Last.fm o hubo un error.");
     }
+    setCargando(false);
   };
 
   return (
-    <div style={{ height: "100vh", width: "100vw", display: 'flex', flexDirection: 'column' }}>
-      
-      {/* BARRA DE HERRAMIENTAS SUPERIOR */}
-      <div style={{ padding: '15px', background: '#222', color: 'white', display: 'flex', gap: '20px', alignItems: 'center' }}>
-        <h2 style={{ margin: 0 }}>🎵 Concert Finder</h2>
+    <div className="app-container">
+      {/* MENÚ LATERAL */}
+      <div className="sidebar">
+        <h2>🎵 Concert Finder</h2>
         
-        <form onSubmit={manejarBusqueda} style={{ display: 'flex', gap: '10px' }}>
-          <input 
-            type="text" 
-            placeholder="Ej. Rock, Pop, Metallica..." 
-            value={busqueda}
-            onChange={(e) => setBusqueda(e.target.value)}
-          />
-          <button type="submit">Buscar</button>
-          <button type="button" onClick={() => cargarConciertos('')}>Ver Todos</button>
-        </form>
+        {/* Buscador General */}
+        <div className="filter-section">
+          <h3>Búsqueda General</h3>
+          <form onSubmit={manejarBusqueda}>
+            <input 
+              type="text" 
+              placeholder="Artista, género o recinto..." 
+              value={busqueda}
+              onChange={(e) => setBusqueda(e.target.value)}
+            />
+            <div className="botones-fila">
+              <button type="submit" className="btn-primary">Buscar</button>
+              <button type="button" className="btn-secondary" onClick={() => { setBusqueda(''); cargarConciertos(''); }}>Ver Todos</button>
+            </div>
+          </form>
+        </div>
 
-        <div style={{ marginLeft: 'auto' }}>
-          {!tokenSpotify ? (
-            <button onClick={loginSpotify} style={{ background: '#1DB954', color: 'white', border: 'none', padding: '10px', borderRadius: '20px', cursor: 'pointer' }}>
-              Conectar con Spotify
+        {/* Recomendador Last.fm */}
+        <div className="filter-section lastfm-section">
+          <h3>✨ Recomendaciones Last.fm</h3>
+          <p>Usa tu historial musical para filtrar</p>
+          <form onSubmit={filtrarPorLastfm}>
+            <input 
+              type="text" 
+              placeholder="Tu usuario de Last.fm" 
+              value={usuarioLastfm}
+              onChange={(e) => setUsuarioLastfm(e.target.value)}
+            />
+            <button type="submit" className="btn-lastfm" disabled={cargando}>
+              {cargando ? 'Cargando...' : 'Filtrar por mis gustos'}
             </button>
-          ) : (
-            <button onClick={filtrarPorMisGustos} style={{ background: '#8A2BE2', color: 'white', border: 'none', padding: '10px', borderRadius: '20px', cursor: 'pointer' }}>
-              ✨ Recomiéndame conciertos
-            </button>
-          )}
+          </form>
+        </div>
+
+        {/* Lista de Conciertos */}
+        <div className="lista-conciertos">
+          <h3>Conciertos Encontrados ({conciertosVisibles.length})</h3>
+          {conciertosVisibles.map(c => (
+            <div key={c.id} className="concierto-card">
+              <h4>{c.artista}</h4>
+              <p>📍 {c.recinto}</p>
+              <p>🗺️ {c.direccion}</p>
+              <p>🏷️ Género: {c.genero}</p>
+              <p>💵 Precio: {c.precio}</p>
+              <a href={c.url} target="_blank" rel="noreferrer">Ver Boletos</a>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* MAPA */}
-      <MapContainer center={center} zoom={12} style={{ flexGrow: 1, width: "100%" }}>
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; OpenStreetMap'
-        />
-        {conciertos.map((concierto) => (
-          <Marker key={concierto.id} position={[concierto.lat, concierto.lng]}>
-            <Popup>
-              <strong>{concierto.artista}</strong> <br /> 
-              📍 {concierto.recinto} <br />
-              <a href={concierto.url} target="_blank" rel="noreferrer">Comprar Boletos</a>
-            </Popup>
-          </Marker>
-        ))}
-      </MapContainer>
+      {/* ÁREA DEL MAPA */}
+      <div className="map-container">
+        <MapContainer center={center} zoom={12} style={{ height: "100%", width: "100%" }}>
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; OpenStreetMap'
+          />
+          {conciertosVisibles.map((concierto) => (
+            <Marker key={concierto.id} position={[concierto.lat, concierto.lng]}>
+              <Popup>
+                <strong>{concierto.artista}</strong> <br/>
+                💵 {concierto.precio} <br/>
+                📍 {concierto.recinto}
+              </Popup>
+            </Marker>
+          ))}
+        </MapContainer>
+      </div>
     </div>
   );
 }
