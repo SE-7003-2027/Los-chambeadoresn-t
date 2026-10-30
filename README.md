@@ -6,16 +6,11 @@
 
 
 * **Materia:** Ingenieria en Software
-* **Profesor/a:** Marisol Amezcua López
-* **Profesor/a:** Eric Toporek Coca
-* **Profesor/a:** Rubén Ruiz Marrón
 
 ### Integrantes
-* **[Nombre]** - [No cuenta / Correo]
-* **[Nombre]** - [No cuenta / Correo]
-* **Gustavo Angel Ortíz Vásquez** - [318231574 / gustavo008@ciencias.unam.mx]
-* **Naomi Mociño** - [No cuenta / Correo]
-* **Hazel Torres Nava** - [319158496 / hazelt@ciencias.unam.mx]
+* **Gustavo Angel Ortíz Vásquez** 
+* **Naomi Mociño** 
+* **Hazel Torres Nava** 
 
 
 # 🎵 Concert Finder
