@@ -13,10 +13,6 @@ function App() {
   
   const center = [19.4326, -99.1332];
 
-  useEffect(() => {
-    cargarConciertos();
-  }, []);
-
   // Cargar desde Ticketmaster
   const cargarConciertos = async (filtro = '') => {
     setCargando(true);
@@ -29,6 +25,14 @@ function App() {
     }
     setCargando(false);
   };
+
+  useEffect(() => {
+    const cargaInicial = window.setTimeout(() => {
+      cargarConciertos();
+    }, 0);
+
+    return () => window.clearTimeout(cargaInicial);
+  }, []);
 
   // Filtrado manual por texto
   const manejarBusqueda = (e) => {
@@ -53,7 +57,7 @@ function App() {
       
       setConciertosVisibles(filtrados);
       if(filtrados.length === 0) alert("No encontramos conciertos cercanos de tus bandas favoritas. Intenta quitar los filtros.");
-    } catch (error) {
+    } catch {
       alert("No se encontró el usuario de Last.fm o hubo un error.");
     }
     setCargando(false);

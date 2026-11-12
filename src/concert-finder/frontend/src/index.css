@@ -1,12 +1,259 @@
+/* index.css */
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bebas+Neue&display=swap');
+
+:root {
+  --bg-cream: #f4f0e6;
+  --text-black: #111111;
+  --rewind-blue: #3b5bdb;
+  --rewind-red: #fa5252;
+  --rewind-yellow: #fcc419;
+  --rewind-green: #94d82d;
+  --border-thick: 3px solid #111111;
+  --shadow-solid: 5px 5px 0px #111111;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-html, body, #root {
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  display: block;
+body {
+  background-color: var(--bg-cream);
+  color: var(--text-black);
+  font-family: 'Space Mono', monospace;
+  overflow-x: hidden;
+}
+
+h1, h2, h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 2px;
+}
+
+/* Clases utilitarias retro */
+.retro-box {
+  background-color: white;
+  border: var(--border-thick);
+  box-shadow: var(--shadow-solid);
+  padding: 20px;
+}
+
+.retro-btn {
+  background-color: var(--text-black);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-family: 'Space Mono', monospace;
+  font-weight: bold;
+  cursor: pointer;
+  border: 2px solid transparent;
+  text-transform: uppercase;
+}
+
+.retro-btn:hover {
+  background-color: transparent;
+  color: var(--text-black);
+  border: 2px solid var(--text-black);
+}
+
+.btn-spotify {
+  background-color: #1DB954;
+  color: var(--text-black);
+  border: var(--border-thick);
+  box-shadow: 3px 3px 0px #111111;
+}
+.btn-spotify:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0px #111111;
+}
+
+.stats-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background-color: var(--rewind-yellow);
+}
+
+.stats-panel {
+  max-width: 720px;
+  width: 100%;
+  background-color: var(--rewind-blue);
+  color: white;
+}
+
+.stats-kicker {
+  color: var(--rewind-yellow);
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.stats-panel h1 {
+  margin: 18px 0 8px;
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  line-height: 0.95;
+}
+
+.stats-copy {
+  max-width: 500px;
+  line-height: 1.6;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin: 28px 0;
+}
+
+.stats-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px;
+  background: var(--rewind-green);
+  color: var(--text-black);
+  border: var(--border-thick);
+  box-shadow: 4px 4px 0 var(--text-black);
+}
+
+.stats-tile strong {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
+}
+
+.stats-tile-red {
+  background: var(--rewind-red);
+}
+
+.stats-button {
+  background: var(--rewind-yellow);
+  color: var(--text-black);
+  border: var(--border-thick);
+}
+
+@media (max-width: 560px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- ESTILOS REWIND (BRUTALISMO) --- */
+.hero-blue { background-color: var(--rewind-blue); color: white; padding: 60px 20px; border-bottom: var(--border-thick); }
+.hero-blue h1 { font-size: 5rem; margin: 0; line-height: 1; }
+
+.grid-conciertos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.controles-conciertos {
+  max-width: 1200px;
+  margin: 30px auto 0;
+  padding: 0 20px;
+}
+
+.buscador-conciertos {
+  display: flex;
+  gap: 10px;
+  border-top: 1px solid var(--text-black);
+  border-bottom: 1px solid var(--text-black);
+  padding: 10px 0;
+}
+
+.buscador-conciertos input {
+  margin: 0;
+  border: var(--border-thick);
+  border-radius: 0;
+  flex: 1;
+}
+
+.filtros-conciertos {
+  display: flex;
+  align-items: end;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 14px 0 0;
+}
+
+.filtros-conciertos button,
+.filtros-conciertos label {
+  border: var(--border-thick);
+  background: white;
+  padding: 8px 10px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: bold;
+}
+
+.filtros-conciertos button { flex: 0 0 auto; }
+.filtros-conciertos button:hover,
+.filtros-conciertos .filtro-activo,
+.filtros-conciertos .gusto-activo { background: var(--rewind-blue); color: white; }
+.filtros-conciertos .gusto-activo { background: var(--rewind-green); color: var(--text-black); }
+
+.filtros-conciertos label { display: flex; align-items: center; gap: 6px; }
+.filtros-conciertos label input { width: auto; margin: 0; padding: 2px; border: 0; }
+
+.estado-conciertos {
+  grid-column: 1 / -1;
+  padding: 40px 20px;
+  border: var(--border-thick);
+  background: white;
+  box-shadow: var(--shadow-solid);
+  font-weight: bold;
+}
+
+.cinta-card {
+  border: var(--border-thick);
+  box-shadow: var(--shadow-solid);
+  position: relative;
+  transition: transform 0.2s;
+  cursor: pointer;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+}
+.cinta-card:hover { transform: translate(-4px, -4px); box-shadow: 9px 9px 0px #111111; }
+
+.cinta-header { padding: 20px; border-bottom: var(--border-thick); flex-grow: 1; min-height: 150px; }
+.cinta-footer { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; background: white; font-weight: bold; }
+
+.badge-match {
+  position: absolute;
+  top: 50px;
+  right: 20px;
+  background: white;
+  border: var(--border-thick);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+/* Barras de progreso para gustos */
+.progress-container { border: var(--border-thick); height: 25px; width: 100%; margin: 5px 0 20px 0; background: white; }
+.progress-fill { height: 100%; border-right: var(--border-thick); }
+
+/* Detalles del concierto */
+.detalle-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 1000px; margin: 40px auto; padding: 20px; }
+.info-box { border: var(--border-thick); background: white; display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+.info-cell { padding: 15px; border: 1px solid #111; }
+
+.map-section { background-color: var(--rewind-blue); padding: 40px 20px; border-top: var(--border-thick); }
+.map-wrapper { max-width: 1000px; margin: 0 auto; height: 400px; border: var(--border-thick); box-shadow: var(--shadow-solid); background: white; }
+
+@media (max-width: 700px) {
+  .hero-blue h1 { font-size: 3.5rem; }
+  .buscador-conciertos { flex-direction: column; }
+  .buscador-conciertos .retro-btn { width: 100%; }
+  .detalle-grid { grid-template-columns: 1fr; }
+  .cinta-footer { align-items: flex-start; flex-direction: column; gap: 8px; }
 }
