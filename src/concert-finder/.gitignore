@@ -6,6 +6,8 @@ frontend/node_modules/
 # Archivos de entorno y credenciales
 .env
 backend/.env
+backend/data/gustos-db.json
+backend/data/usuarios-db.json
 
 # Archivos de compilación o temporales
 dist/

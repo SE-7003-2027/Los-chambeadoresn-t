@@ -1,212 +1,231 @@
-# Los-chambeadoresn-t
+# Rewind Concert Finder
 
-# Proyecto de Ingenieria en Software:
+Aplicación web para descubrir conciertos, consultar sus ubicaciones en un mapa y ordenar la cartelera según los gustos musicales del usuario.
 
-## 👥 Datos Generales
-
-
-* **Materia:** Ingenieria en Software
-
-### Integrantes
-* **Gustavo Angel Ortíz Vásquez** 
-* **Naomi Mociño** 
-* **Hazel Torres Nava** 
+El proyecto forma parte de la materia **Ingeniería en Software**.
 
 
-# 🎵 Concert Finder
+## Características
 
-**Concert Finder** es una aplicación web que permite consultar conciertos musicales y visualizar sus ubicaciones en un mapa interactivo. El proyecto está desarrollado en JavaScript, utilizando React para la interfaz y Node.js con Express para el servidor.
+- Consulta de eventos musicales mediante Ticketmaster Discovery API.
+- Catálogo de eventos musicales de México con paginación completa de Ticketmaster.
+- Búsqueda por artista, recinto o ciudad.
+- Filtros por próximos eventos, año completo y fechas personalizadas.
+- Filtro **Cerca de mí** mediante geolocalización del navegador.
+- Mapa interactivo con React Leaflet y OpenStreetMap.
+- Registro e inicio de sesión con cuentas persistentes.
+- Contraseñas almacenadas con hash `bcrypt`.
+- Sesiones autenticadas mediante JWT.
+- Inicio de sesión con Spotify OAuth.
+- Consulta de estadísticas reales de Last.fm.
+- Asociación persistente de la cuenta de Last.fm con la cuenta de Rewind.
+- Porcentaje de afinidad de `0%` a `100%` cuando existen gustos guardados.
+- Ordenamiento de conciertos de mayor a menor afinidad.
+- Enlaces externos para consultar o comprar boletos.
 
-El objetivo es facilitar la búsqueda de eventos musicales mediante una representación geográfica, mostrando información de los conciertos disponibles y permitiendo que el usuario consulte sus ubicaciones y accesos externos.
+## Tecnologías
 
-Actualmente, el proyecto utiliza la **Ticketmaster Discovery API** para obtener información de los eventos y **OpenStreetMap** para mostrar el mapa. Además, integra la **API de Last.fm** para ofrecer recomendaciones personalizadas basadas en los gustos musicales del usuario.
+| Tecnología | Uso |
+| --- | --- |
+| React | Interfaz web y componentes |
+| Vite | Desarrollo y compilación del frontend |
+| React Router | Navegación entre vistas |
+| Axios | Peticiones HTTP |
+| Node.js | Entorno del backend |
+| Express | Servidor y API REST |
+| bcrypt | Hash seguro de contraseñas |
+| JSON Web Token | Autenticación de sesiones |
+| Leaflet / React Leaflet | Mapa interactivo |
+| OpenStreetMap | Capas cartográficas |
+| Ticketmaster Discovery API | Eventos musicales |
+| Last.fm API | Artistas, reproducciones y géneros |
+| Spotify Web API | Inicio de sesión mediante OAuth |
+| Docker Compose | Ejecución coordinada de frontend y backend |
 
-## 📌 Características principales
-
-- **Mapa interactivo y diseño responsivo:** visualización de las ubicaciones mediante marcadores dentro de una interfaz adaptable a computadoras y dispositivos móviles.
-- **Filtro inteligente con Last.fm:** sistema de recomendaciones que utiliza los artistas más escuchados del usuario en Last.fm para identificar conciertos relacionados con sus gustos musicales.
-- **Búsqueda general:** barra de búsqueda manual para buscar eventos por artista, género o recinto.
-- **Información detallada de eventos:** las tarjetas y los marcadores muestran información como el artista, la dirección del recinto, el género musical y el precio cuando está disponible.
-- **Acceso a eventos:** enlaces externos para consultar información adicional sobre los conciertos.
-- **Arquitectura cliente-servidor:** separación entre la interfaz web y el backend, que gestiona las consultas a las API externas.
-
-> Nota: si el precio oficial no está disponible y se muestra un estimado, debe identificarse claramente como una estimación y no como un precio confirmado por el organizador.
-
-## 🛠️ Tecnologías utilizadas
-
-| Tecnología | Función |
-|---|---|
-| JavaScript | Lenguaje principal del proyecto. |
-| React | Desarrollo de la interfaz de usuario y gestión de estados con `useState` y `useEffect`. |
-| Vite | Herramienta para ejecutar y desarrollar el frontend. |
-| Node.js | Entorno de ejecución del backend. |
-| Express | Creación del servidor y de los endpoints de la aplicación, como `/api/conciertos` y `/api/lastfm/mis-artistas`. |
-| Axios | Realización de peticiones HTTP desde el frontend y el backend. |
-| React Leaflet | Integración del mapa interactivo con React. |
-| Leaflet | Biblioteca para la creación de mapas interactivos. |
-| OpenStreetMap | Proveedor de los datos cartográficos utilizados en el mapa. |
-| Ticketmaster Discovery API | Fuente de información de los eventos musicales. |
-| Last.fm API | Obtención de información sobre los artistas más escuchados y generación de recomendaciones musicales. |
-| dotenv | Administración de variables de entorno y claves de las API. |
-| CORS | Configuración de solicitudes entre el frontend y el backend. |
-| Docker / Docker Compose | Contenerización y estandarización del entorno de desarrollo. |
-
-## 📁 Estructura del proyecto
-
-El repositorio se organiza en dos componentes principales, junto con los archivos de configuración de contenedores y control de versiones.
+## Estructura
 
 ```text
-concert-finder/
-├── backend/
-│   ├── Dockerfile
-│   ├── index.js
-│   ├── package.json
-│   ├── package-lock.json
-│   └── .env                  # Configuración local; no se sube a Git
-│
-├── frontend/
-│   ├── Dockerfile
-│   ├── src/
-│   │   ├── App.jsx
-│   │   ├── App.css
-│   │   ├── index.css
-│   │   └── main.jsx
-│   ├── public/
-│   ├── package.json
-│   ├── package-lock.json
-│   └── index.html
-│
-├── docker-compose.yml
-├── .gitignore
-└── README.md
+.
+├── README.md
+└── src/
+    └── concert-finder/
+        ├── docker-compose.yml
+        ├── backend/
+        │   ├── Dockerfile
+        │   ├── index.js
+        │   ├── package.json
+        │   ├── .env                  # Solo local
+        │   └── data/
+        │       ├── gustos-db.json    # Gustos de Last.fm por usuario
+        │       └── usuarios-db.json  # Cuentas y vínculos de Last.fm
+        └── frontend/
+            ├── Dockerfile
+            ├── package.json
+            ├── index.html
+            └── src/
+                ├── AppRouter.jsx
+                ├── Conciertos.jsx
+                ├── ConciertoDetalle.jsx
+                ├── Login.jsx
+                ├── MisGustos.jsx
+                ├── SpotifyCallback.jsx
+                ├── App.css
+                └── index.css
 ```
 
-## ⚙️ Requisitos previos
+Los archivos de datos locales están excluidos de Git. En producción se recomienda reemplazarlos por una base de datos administrada.
 
-Antes de instalar y ejecutar el proyecto, es necesario contar con las siguientes herramientas:
+## Requisitos
 
-- **Node.js:** versión LTS compatible; se recomienda la versión 20 o superior.
-- **npm:** gestor de paquetes que se instala junto con Node.js.
-- **Git:** para clonar el repositorio.
-- **Docker y Docker Compose:** recomendados para ejecutar el proyecto en un entorno estandarizado.
-- **Ticketmaster Developer API Key:** necesaria para consultar eventos musicales.
-- **Last.fm API Key:** necesaria para obtener información musical y generar recomendaciones.
+- Docker Engine.
+- Docker Compose.
+- Node.js 20 o superior para ejecutar el proyecto fuera de Docker.
+- Claves de Ticketmaster, Last.fm y Spotify.
 
-## 📥 Instalación y configuración
+## Variables de entorno
 
-### 1. Clonar el repositorio
-
-Abre una terminal y ejecuta los siguientes comandos:
-
-```bash
-git clone <URL_DEL_REPOSITORIO>
-cd concert-finder
-```
-
-Sustituye `<URL_DEL_REPOSITORIO>` por la dirección real del repositorio.
-
-### 2. Configurar las variables de entorno
-
-Para proteger las credenciales y evitar subirlas a GitHub, crea un archivo llamado `.env` dentro de la carpeta `backend/`.
-
-El archivo `backend/.env` debe contener la siguiente estructura:
+Crea `src/concert-finder/backend/.env` con tus propias credenciales:
 
 ```dotenv
+PORT=3000
+JWT_SECRET=una-clave-larga-y-segura
+FRONTEND_URL=http://localhost:5173
+
 TICKETMASTER_API_KEY=tu_clave_de_ticketmaster
 LASTFM_API_KEY=tu_clave_de_lastfm
-PORT=3000
+
+SPOTIFY_CLIENT_ID=tu_client_id_de_spotify
+SPOTIFY_CLIENT_SECRET=tu_client_secret_de_spotify
+SPOTIFY_REDIRECT_URI=http://127.0.0.1:3000/api/spotify/callback
 ```
 
-Sustituye los valores de ejemplo por tus propias claves de API.
+No subas `.env`, contraseñas, tokens ni los archivos de `backend/data/` al repositorio.
 
-### 3. Configurar `.gitignore`
+En Spotify Developer registra exactamente esta URL de redirección:
 
-Verifica que el archivo `.gitignore` incluya las siguientes entradas para excluir las dependencias, los archivos generados y las credenciales:
-
-```gitignore
-node_modules/
-backend/node_modules/
-frontend/node_modules/
-
-.env
-backend/.env
-frontend/.env
-
-dist/
+```text
+http://127.0.0.1:3000/api/spotify/callback
 ```
 
-**Importante:** no compartas ni subas las claves de las API al repositorio. El archivo `.env` debe permanecer local.
+## Ejecución con Docker
 
-## 🚀 Ejecución del proyecto
-
-La aplicación puede ejecutarse mediante Docker Compose o de forma local, sin Docker.
-
-### Opción A. Ejecución mediante Docker Compose (recomendada)
-
-Desde la raíz del proyecto (`concert-finder/`), ejecuta:
+Desde la carpeta del proyecto:
 
 ```bash
+cd src/concert-finder
 sudo docker compose up --build
 ```
 
-Una vez iniciados los servicios, podrás acceder a las siguientes direcciones:
+Direcciones disponibles:
 
-- **Frontend:** [http://localhost:5173](http://localhost:5173)
-- **Backend — API de conciertos:** [http://localhost:3000/api/conciertos](http://localhost:3000/api/conciertos)
+- Frontend: [http://localhost:5173](http://localhost:5173)
+- Backend: [http://localhost:3000](http://localhost:3000)
+- Salud del backend: [http://localhost:3000/api/health](http://localhost:3000/api/health)
 
-Para detener los contenedores, presiona `Ctrl + C` o ejecuta el siguiente comando en otra terminal:
+Para detener los servicios:
 
 ```bash
 sudo docker compose down
 ```
 
-### Opción B. Ejecución local tradicional (sin Docker)
+Los datos de cuentas y gustos se conservan en `backend/data/` mediante el volumen montado por Compose.
 
-Para ejecutar la aplicación manualmente, necesitarás dos terminales.
+## Ejecución local sin Docker
 
-#### 1. Iniciar el backend
-
-En la primera terminal, ejecuta:
+### Backend
 
 ```bash
-cd backend
+cd src/concert-finder/backend
 npm install
 node index.js
 ```
 
-El backend se ejecutará en el puerto `3000`, siempre que esa sea la configuración definida en el archivo `.env`.
+### Frontend
 
-#### 2. Iniciar el frontend
-
-Abre una segunda terminal y ejecuta:
+En otra terminal:
 
 ```bash
-cd frontend
+cd src/concert-finder/frontend
 npm install
 npm run dev -- --host
 ```
 
-Una vez iniciado Vite, podrás acceder al frontend desde la dirección que indique la terminal, normalmente:
+## Rutas del frontend
 
-[http://localhost:5173](http://localhost:5173)
+| Ruta | Descripción |
+| --- | --- |
+| `/` | Registro e inicio de sesión |
+| `/oauth/spotify` | Callback de autenticación de Spotify |
+| `/stats` | Gustos y estadísticas de Last.fm |
+| `/conciertos` | Cartelera, búsqueda, afinidad y filtros |
+| `/concierto/:id` | Detalle y mapa de un concierto |
 
-## 📋 Gestión del proyecto
+## API principal
 
-La organización y el seguimiento de las tareas de desarrollo de Concert Finder se realizan mediante Trello. En el tablero se registran los objetivos, las funcionalidades pendientes y el progreso del proyecto.
+| Método | Endpoint | Descripción |
+| --- | --- | --- |
+| `GET` | `/api/health` | Estado del backend |
+| `GET` | `/api/conciertos` | Eventos musicales de Ticketmaster México |
+| `GET` | `/api/conciertos/:id` | Detalle de un evento |
+| `POST` | `/api/auth/register` | Crear una cuenta |
+| `POST` | `/api/auth/login` | Iniciar sesión |
+| `GET` | `/api/auth/me` | Consultar la cuenta autenticada |
+| `PUT` | `/api/auth/lastfm` | Asociar un usuario de Last.fm |
+| `GET` | `/api/lastfm/stats?username=...` | Obtener y guardar estadísticas de Last.fm |
+| `GET` | `/api/gustos/:username` | Recuperar gustos guardados |
+| `GET` | `/auth/spotify` | Iniciar OAuth de Spotify |
+| `POST` | `/api/auth/spotify/exchange` | Intercambiar el código temporal de Spotify |
 
-- **Tablero de Trello:** [Concert Finder](https://trello.com/invite/b/6acebcf5829f8c3defdabc50/ATTI2bd7b5f077ba91566b30ecaf92799b2f1FD29EC7/concert-finder)
+Las rutas protegidas requieren:
 
-## 🎯 Objetivo general
+```http
+Authorization: Bearer <token>
+```
 
-Desarrollar una aplicación web que permita encontrar conciertos y eventos musicales de acuerdo con los gustos del usuario, utilizando información de sus artistas más escuchados y mostrando los resultados en un mapa interactivo.
+## Flujo de usuario
 
-## 🔮 Mejoras futuras
+1. El usuario crea una cuenta o inicia sesión.
+2. También puede autenticarse directamente con Spotify.
+3. En **Mis gustos**, introduce su usuario de Last.fm.
+4. Rewind consulta artistas, reproducciones y géneros.
+5. El usuario de Last.fm queda vinculado a su cuenta.
+6. En **Conciertos**, el vínculo se recupera automáticamente.
+7. Los eventos muestran una afinidad entre `0%` y `100%` cuando hay gustos guardados.
+8. **Cerca de mí** solicita permiso de ubicación y filtra eventos en un radio de 50 km.
 
-Entre las posibles mejoras del proyecto se encuentran:
+La geolocalización requiere permiso del navegador. `localhost` es válido para desarrollo; en producción se necesita HTTPS.
 
-- Incorporar filtros por fecha, género musical y ubicación.
-- Mejorar la personalización de las recomendaciones.
-- Permitir guardar conciertos favoritos.
-- Ampliar las opciones para encontrar artistas similares.
-- Mejorar la información disponible sobre precios, recintos y accesos a las entradas.
-- Evaluar la integración con otras plataformas musicales, según las API y los permisos disponibles.
+## Comprobaciones útiles
+
+Frontend:
+
+```bash
+cd src/concert-finder/frontend
+npm run lint
+npm run build
+```
+
+Backend:
+
+```bash
+node --check src/concert-finder/backend/index.js
+```
+
+Salud del backend:
+
+```bash
+curl http://localhost:3000/api/health
+```
+
+## Seguridad
+
+- Las claves de API solo se leen en el backend.
+- Las contraseñas nunca se almacenan en texto plano.
+- Las sesiones utilizan JWT firmado.
+- Spotify utiliza `state` firmado y códigos temporales de un solo uso.
+- `.env`, cuentas locales y gustos personales están excluidos de Git.
+- Para producción se recomienda HTTPS, una base de datos real, rotación de secretos y cookies `HttpOnly` para las sesiones.
+
+## Objetivo
+
+Rewind conecta los gustos musicales personales con conciertos reales disponibles, para que descubrir un próximo evento sea rápido, visual y relevante para cada usuario.
